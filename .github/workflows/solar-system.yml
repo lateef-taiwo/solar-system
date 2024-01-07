@@ -70,7 +70,7 @@ jobs:
               run: npm install
 
             - name: Check Code Coverage
-              continue-on-error: true
+              continue-on-error: true  # use continue on error to conitnue to run the workflow even if this step fails
               run: npm run coverage
                 #The command npm run coverage is typically used in a Node.js project to 
                 # generate code coverage reports for your tests
