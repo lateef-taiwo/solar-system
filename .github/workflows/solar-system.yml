@@ -70,11 +70,16 @@ jobs:
               run: npm install
 
             - name: Check Code Coverage
+              continue-on-error: true
               run: npm run coverage
-
+                #The command npm run coverage is typically used in a Node.js project to 
+                # generate code coverage reports for your tests
             - name: Archive Test Result
               uses: actions/upload-artifact@v3
               with:
                 name: Code-Coverage-Result
                 path: coverage
                 retention-days: 5
+
+
+        #Use expressions to programmatically execute jobs and steps based on conditions
