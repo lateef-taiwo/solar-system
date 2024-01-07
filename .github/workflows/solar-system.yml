@@ -27,14 +27,18 @@ jobs:
           with:
             node-version: 20
     
+            # npm install
         - name: Install Dependencies
           run: npm install
     
+          # perform unit testing
         - name: Unit Testing
           run: npm test
+
+          #Use upload-artifact to archive the test result so you can download it to your system
           
         - name: Archive Test Result
           uses: actions/upload-artifact@v3
           with:
             name: Mocha-Test-Result
-            path: test-results.xml
+            path: test-results.xml 
