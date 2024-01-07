@@ -51,7 +51,7 @@ jobs:
           
         - name: Archive Test Result
           # use if condition to make this step run even if the previous step fail or succeed
-          if: steps.nodejs-unit-testing-step.outcome == 'failure' || steps.nodejs-unit-testing-step.outcome == 'success'
+          if: failure() && (steps.nodejs-unit-testing-step.outcome == 'failure' || steps.nodejs-unit-testing-step.outcome == 'success')
           uses: actions/upload-artifact@v3
           with:
             name: Mocha-Test-Result
