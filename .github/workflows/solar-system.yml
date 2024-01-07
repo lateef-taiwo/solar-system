@@ -50,10 +50,10 @@ jobs:
           #Use upload-artifact to archive the test result so you can download it to your system
           
         - name: Archive Test Result
-          # use if condition to make this step run even if the previous step fail or succeed
-          if: failure() && (steps.nodejs-unit-testing-step.outcome == 'failure' || steps.nodejs-unit-testing-step.outcome == 'success')
-          #Add always function
-          #if always()
+          # use if condition to skip this step even if the previous step fail or succeed. 
+          #if failure() && (steps.nodejs-unit-testing-step.outcome == 'failure' || steps.nodejs-unit-testing-step.outcome == 'success')
+          #Add always function to make the step run regardless of the status of the previous step
+          if: always()
           uses: actions/upload-artifact@v3
           with:
             name: Mocha-Test-Result
