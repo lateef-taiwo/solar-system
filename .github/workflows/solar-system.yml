@@ -108,12 +108,21 @@ jobs:
       steps:
         - name: Checkout
           uses: actions/checkout@v4
-          
+
+          #Add step to login to dockerhub in the github hosted virtual machine
         - name: DockerHub Login
           uses: docker/login-action@v2.2.0
           with: 
             username: ${{ vars.DOCKERHUB_USERNAME }}
             password: ${{ secrets.DOCKERHUB_PASSWORD }}
+        
+            #Add step to login to GitHub Container Registry GHCR
+        - name: GHCR GitHub Container Registry Login
+          uses: docker/login-action@v2.2.0
+          with: 
+            registry: ghcr.io
+            username: ${{ github.repository_owner }}   #this represents the github username,you don't need to hardcode it or put it in env variables
+            password: ${{ secrets.GITHUB_TOKEN }}  #this represents the github token, which is automatically generated as part of secrets, so you don't have to manually create it
 
         - name: Docker Build For Testing
           uses: docker/build-push-action@v4
@@ -138,9 +147,11 @@ jobs:
             echo Testing Image URL using wget
             wget -q -O - 127.0.0.1:3000/live | grep live
 
-        - name: Docker Push
+        - name: Container Registry Push
           uses: docker/build-push-action@v4
           with: 
             context: .
             push: true
-            tags: ${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{ github.sha }}
+            tags: |
+              ${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{ github.sha }}
+              ghcr.io/${{ github.repository_owner }}/solar-system:${{ github.sha }}
