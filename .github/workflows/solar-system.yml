@@ -17,6 +17,15 @@ env:
 jobs:
     unit-testing:
         name: Unit Testing
+        services:
+          mongo-db:
+            image: siddharth67/mongo-db:non-prod
+            ports:
+              - 27017:27017
+        env:
+            MONGO_URI: 'mongodb://localhost:27017/superData'
+            MONGO_USERNAME: non-prod-user
+            MONGO_PASSWORD: non-prod-password
         # Add a Matrix strategy to test on several operating systems
         strategy:
             matrix:
@@ -68,15 +77,30 @@ jobs:
 
     code-coverage:
         name: Code Coverage
+        container:
+          image: node:18
+        services: #use a service container
+          mongo-db:
+            image: siddharth67/mongo-db:non-prod
+            #we don't need to specify ports becuase it using container to container network bridged communication
+            # ports:
+            #   - 27017:27017
+            options:
+                --name mongo
+        env:
+            MONGO_URI: 'mongodb://mongo:27017/superData'
+            MONGO_USERNAME: non-prod-user
+            MONGO_PASSWORD: non-prod-password
         runs-on: ubuntu-latest
         steps:
             - name: Checkout Repository
               uses: actions/checkout@v4
 
-            - name: Setup Nodejs Version - 18
-              uses: actions/setup-node@v3
-              with: 
-                node-version: 18
+            # we don't need to specify node version because the container itself has node installed
+            # - name: Setup Nodejs Version - 18
+            #   uses: actions/setup-node@v3
+            #   with: 
+            #     node-version: 18
 
               #cache node dependencies
             - name: Cache NPM Dependencies
