@@ -182,4 +182,22 @@ jobs:
               ${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{ github.sha }}
               ghcr.io/${{ github.repository_owner }}/solar-system:${{ github.sha }}
 
-              
+    #job to deploy container to k8s cluster
+    dev-deploy:
+      needs: docker
+      runs-on:  ubuntu-latest
+      steps:
+        - name: Checkout Repo
+          uses: actions/checkoutv4
+
+        - name: Install Kubectl CLI
+          uses: azure/setup-kubectl@v3
+          with:
+            version: '1.26.0' # default is latest stable
+          #id: install
+        
+        - name: Fetch Kubernetes Cluster details
+          run: |
+            kubectl version --short
+            echo -------------------------------
+            kubectl get nodes
