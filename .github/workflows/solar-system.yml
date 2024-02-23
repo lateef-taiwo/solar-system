@@ -193,7 +193,7 @@ jobs:
         - name: Install Kubectl CLI
           uses: azure/setup-kubectl@v3
           with:
-            version: '1.26.0' # default is latest stable
+            version: 'v1.26.0' # default is latest stable
           #id: install
         
         - name: Fetch Kubernetes Cluster details
